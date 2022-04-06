@@ -4,12 +4,15 @@ import 'package:sample_mvvm_easy/ui/viewmodel/player_viewmodel.dart';
 
 void main() {
   runApp(MultiProvider(
-    providers: [ChangeNotifierProvider(create: (_) => PlayerViewModel())],
+    providers: [
+      ChangeNotifierProvider(create: (_) => PlayerViewModel()),
+      Provider.value(value: 5),
+    ],
     child: const Player(),
   ));
 
   //sigle provider
-  // runApp(Provider(
+  // runApp(ChangeNotifierProvider(
   //   create: (_) => PlayerViewModel(),
   //   child: const Player(),
   // ));
@@ -22,6 +25,8 @@ class Player extends StatelessWidget {
   Widget build(BuildContext context) {
     //viewModel 참조
     var viewModel = Provider.of<PlayerViewModel>(context);
+    var value = Provider.of<int>(context);
+    var flag = context.select((PlayerViewModel value) => value.isPlaying);
 
     return MaterialApp(
       home: Scaffold(
@@ -29,6 +34,7 @@ class Player extends StatelessWidget {
           child: Column(children: [
             const Spacer(),
             //viewModel 상태 정보로 View표현
+            Text('$value, $flag'),
             Text(viewModel.isPlaying ? "재생중" : "정지중"),
             GestureDetector(
               onTap: () {
